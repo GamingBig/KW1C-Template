@@ -1,0 +1,86 @@
+{
+	"name": "kw1c-template",
+	"displayName": "KW1C Template",
+	"publisher": "JoeryMunninghoff",
+	"description": "",
+	"version": "0.0.3",
+	"icon": "images/Template_logo_512x.png",
+	"engines": {
+		"vscode": "^1.62.0"
+	},
+	"categories": [
+		"Snippets"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/GamingBig/kw1c-vscode-template-extension.git"
+	},
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"configuration": {
+			"title": "kw1c-template",
+			"properties": {
+				"kw1c-template.Name": {
+					"type": "string",
+					"default": "You can add your name in settings.",
+					"description": "The name that gets used when you insert a template."
+				},
+				"kw1c-template.triggerWord": {
+					"type": "string",
+					"default": "kw1c-template",
+					"description": "The text you need to type to insert the template."
+				},
+				"kw1c-template.htmlExtras": {
+					"type": "string",
+					"default": "None",
+					"enum": [
+						"None",
+						"Header, Main and footer",
+						"Header and Main"
+					],
+					"enumDescriptions": [
+						"Dont add anything extra.",
+						"Add a header, main and footer element.",
+						"Add a header and main element."
+					]
+				},
+				"kw1c-template.cssExtras": {
+					"type": "string",
+					"default": "None",
+					"enum": [
+						"None",
+						"Body margin & padding: 0px"
+					],
+					"enumDescriptions": [
+						"Dont add anything extra.",
+						"Set the margin and padding of the body to 0px."
+					]
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.62.0",
+		"@types/glob": "^7.1.4",
+		"@types/mocha": "^9.0.0",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^5.1.0",
+		"@typescript-eslint/parser": "^5.1.0",
+		"eslint": "^8.1.0",
+		"glob": "^7.1.7",
+		"mocha": "^9.1.3",
+		"typescript": "^4.4.4",
+		"@vscode/test-electron": "^1.6.2"
+	}
+}
