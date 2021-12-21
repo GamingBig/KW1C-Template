@@ -1,32 +1,39 @@
-import { ExtensionContext, languages, TextDocument, Position, CancellationToken, CompletionContext, workspace, CompletionItem, SnippetString, MarkdownString } from "vscode";
+import { ExtensionContext, languages, TextDocument, Position, CancellationToken, CompletionContext, workspace, CompletionItem, SnippetString, MarkdownString, WorkspaceConfiguration, ConfigurationChangeEvent } from "vscode";
+import * as extraJSFile from "../extra Options/JSOptions.json";
 
-export function jsCompletion(context: ExtensionContext){
+export function jsCompletion(context: ExtensionContext, config: WorkspaceConfiguration){
+
+	var extraJS = JSON.parse(JSON.stringify(extraJSFile))
+	// reload config if it changes
+	workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
+		config = workspace.getConfiguration("kw1c-template")
+	})
 
     return languages.registerCompletionItemProvider("javascript", {
-		
-		provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
+		async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
             // Dont suggest when something has been typed
             if(document.lineCount > 3){
                 return undefined;
             }
 
             // Get trigger from settings
-            var configuration = workspace.getConfiguration("kw1c-template");
-            var trigger = configuration.triggerWord
+            var trigger = config.triggerWord
 
+			var extraJsConfig = config.jsExtras
+			var addTime = config.addTime
 			// Get the users' name from settings.
-			let userName = configuration.Name
-
+			let userName = config.Name
+			var jsSnippet = extraJS[extraJsConfig].join("\n")
+			// Modify snippet
+			jsSnippet = jsSnippet.replace("{userName}", userName)
+				// Dont add time
+			if (!addTime) {
+				jsSnippet = jsSnippet.replace(" $CURRENT_HOUR:$CURRENT_MINUTE", "")
+			}
+			
 			const jsCompletion = new CompletionItem(trigger);
 			jsCompletion.insertText = new SnippetString(
-			'/*\n' +
-				'\tAuteur: '+userName+'\n' +
-				'\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE\n' +
-			'\n' +
-				'\tOmschrijving: ${3:Omschrijving}\n' +
-			'*/\n' +
-			'\n' +
-			'$0'
+				jsSnippet
 			);
 			jsCompletion.documentation = new MarkdownString("Inserts a snippet so you can get on with coding your project.");
 

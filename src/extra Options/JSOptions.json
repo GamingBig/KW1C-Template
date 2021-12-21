@@ -1,0 +1,12 @@
+{
+    "None": [
+        "/*",
+            "\tAuteur: {userName}",
+            "\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
+        "",
+            "\tOmschrijving: ${3:Omschrijving}",
+        "*/",
+        "",
+        "$0"
+    ]
+}

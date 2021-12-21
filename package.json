@@ -3,7 +3,7 @@
 	"displayName": "KW1C Template",
 	"publisher": "JoeryMunninghoff",
 	"description": "",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"icon": "images/Template_logo_512x.png",
 	"engines": {
 		"vscode": "^1.62.0"
@@ -16,12 +16,14 @@
 		"url": "https://github.com/GamingBig/kw1c-vscode-template-extension.git"
 	},
 	"activationEvents": [
-		"onStartupFinished"
+		"onLanguage:css",
+		"onLanguage:javascript",
+		"onLanguage:html"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
-			"title": "kw1c-template",
+			"title": "KW1C Template Config",
 			"properties": {
 				"kw1c-template.Name": {
 					"type": "string",
@@ -33,18 +35,23 @@
 					"default": "kw1c-template",
 					"description": "The text you need to type to insert the template."
 				},
+				"kw1c-template.addTime":{
+					"type": "boolean",
+					"default": true,
+					"description": "Add the time to the template."
+				},
 				"kw1c-template.htmlExtras": {
 					"type": "string",
 					"default": "None",
 					"enum": [
 						"None",
-						"Header, Main and footer",
-						"Header and Main"
+						"Header and Main",
+						"Header, Main and footer"
 					],
 					"enumDescriptions": [
-						"Dont add anything extra.",
-						"Add a header, main and footer element.",
-						"Add a header and main element."
+						"Don't add anything extra.",
+						"Add a header and main element.",
+						"Add a header, main and footer element."
 					]
 				},
 				"kw1c-template.cssExtras": {
@@ -55,12 +62,25 @@
 						"Body margin & padding: 0px"
 					],
 					"enumDescriptions": [
-						"Dont add anything extra.",
+						"Don't add anything extra.",
 						"Set the margin and padding of the body to 0px."
+					]
+				},
+				"kw1c-template.jsExtras":{
+					"type": "string",
+					"default": "None",
+					"enum": [
+						"None"
+					],
+					"enumDescriptions": [
+						"Don't add anything extra."
 					]
 				}
 			}
 		}
+	},
+	"workbench.colorCustomizations": {
+		"activityBar.background": "#00AA00"
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

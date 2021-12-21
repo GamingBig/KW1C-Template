@@ -1,13 +1,22 @@
 
-This is a extension not made for everyone, it is my first extension and I made it to quickly insert a template for my ICT study.
+## Notice:
+* This is an extension made for the ICT course at KW1C, so it's made for specific people.
+* This is my first extension.
 
 ## Features
 
 Write kw1c-template (modifiable in settings) to insert a template.
 
-## Extension Settings
+![Demo](./images/KW1C_Template_demo.gif)
 
-* `kw1c-template.Name`: The value to put in the name field.
-* `kw1c-template.triggerWord`: The thing you have to type in to insert the template.
+## Extension Settings
+|Command                    |Usage                              |Default
+|---------------------------|-----------------------------------|---------
+|`kw1c-template.addTime`    |Add time to the module header.     |   Enabled
+|`kw1c-template.cssExtras`  |Extra options for CSS.             |   None
+|`kw1c-template.htmlExtras` |Extra options for HTML.            |   None
+|`kw1c-template.jsExtras`   |Extra options for Javascript.      |   None
+|`kw1c-template.Name`       |Your name to automatically add it. |   "You can add your name in settings."
+|`kw1c-template.triggerWord`|Suggestion keyword.                |   "kw1c-template"
 
 **Enjoy!**

@@ -1,14 +1,27 @@
 # Change Log
 
 ## [0.0.3]
-### Added
-- Extra HTML option to only add "header" and "main" elements.
+### **Added**
+- Extra HTML option to only add "header" and "main" elements (so without a footer).
+- A notification to ask if you want to set your name (if you haven't already).
+
+### ***Changed***
+- Plugin will now only be loaded if you open a CSS, Javascript or HTML file.
+- The name in settings is now `KW1C Template Config` and not `kw1c-template`
+- Optimisation: Every language has their own file, so now it's easy to add languages. ;)
 - Suggestions wont show up if 3 or more lines of code have been written.
+- Updated README.md to inlude new settings and made it look nice.
 
 ## [0.0.2]
-### Added
+### **Added**
 - New options to automatically add extras when you insert a template.
 - Extension icon
 
-### Changed
+### ***Changed***
 - Reloading is no longer required when you change settings.
+
+## [0.0.1]
+### **Added**
+- Made extension,
+- Basic system to just add standard snippets to VSCode.
+- Options to insert name.
