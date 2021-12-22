@@ -7,7 +7,7 @@
 
 Write kw1c-template (modifiable in settings) to insert a template.
 
-![Demo](./images/KW1C_Template_demo.gif)
+![Demo](https://github.com/GamingBig/KW1C-Template/blob/main/images/KW1C_Template_demo.gif?raw=true)
 
 ## Extension Settings
 |Command                    |Usage                              |Default

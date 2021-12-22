@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.31]
+### **Bug fix**
+- Forgot some stuff.
+
 ## [0.0.3]
 ### **Added**
 - Extra HTML option to only add "header" and "main" elements (so without a footer).
