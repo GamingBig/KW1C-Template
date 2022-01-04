@@ -18,7 +18,8 @@
 	"activationEvents": [
 		"onLanguage:css",
 		"onLanguage:javascript",
-		"onLanguage:html"
+		"onLanguage:html",
+		"sni"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -35,10 +36,20 @@
 					"default": "kw1c-template",
 					"description": "The text you need to type to insert the template."
 				},
-				"kw1c-template.addTime":{
+				"kw1c-template.addTime": {
 					"type": "boolean",
 					"default": true,
 					"description": "Add the time to the template."
+				},
+				"kw1c-template.defaultCssFile": {
+					"type": "string",
+					"default": "styles/stylesheet.css",
+					"description": "Change the default CSS file location when inserting a HTML template"
+				},
+				"kw1c-template.defaultJavascriptFile": {
+					"type": "string",
+					"default": "scripts/script.js",
+					"description": "Change the default Javascript file location when inserting a HTML template"
 				},
 				"kw1c-template.htmlExtras": {
 					"type": "string",
@@ -66,7 +77,7 @@
 						"Set the margin and padding of the body to 0px."
 					]
 				},
-				"kw1c-template.jsExtras":{
+				"kw1c-template.jsExtras": {
 					"type": "string",
 					"default": "None",
 					"enum": [

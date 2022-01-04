@@ -1,4 +1,4 @@
-import { ExtensionContext, languages, TextDocument, Position, CancellationToken, CompletionContext, workspace, CompletionItem, SnippetString, MarkdownString, WorkspaceConfiguration, ConfigurationChangeEvent } from "vscode";
+import { ExtensionContext, languages, TextDocument, Position, CancellationToken, CompletionContext, workspace, CompletionItem, SnippetString, MarkdownString, WorkspaceConfiguration, ConfigurationChangeEvent, CompletionItemKind } from "vscode";
 import * as extraCSSFile from "../extra Options/CSSOptions.json";
 
 export function cssCompletion(context: ExtensionContext, config: WorkspaceConfiguration){
@@ -35,7 +35,7 @@ export function cssCompletion(context: ExtensionContext, config: WorkspaceConfig
 				cssSnippet = cssSnippet.replace(" $CURRENT_HOUR:$CURRENT_MINUTE", "")
 			}
 
-			const cssCompletion = new CompletionItem(trigger);
+			const cssCompletion = new CompletionItem(trigger, CompletionItemKind.Constant);
 			cssCompletion.insertText = new SnippetString(cssSnippet);
 			cssCompletion.documentation = new MarkdownString("Inserts a snippet so you can get on with coding your project.");
 
