@@ -1,21 +1,19 @@
 {
-    "None": [
+    "defaultHead": [
         "/*",
-			"\tAuteur: {userName}",
-			"\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
-		"",
-			"\tOmschrijving: ${3:Omschrijving}",
-		"*/",
-		"",
-		"$0"
+            "\tAuteur: {userName}",
+            "\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
+        "",
+            "\tOmschrijving: ${3:Omschrijving}",
+        "*/"
+    ],
+    "None": [
+        "{DefaultHead}",
+        "",
+        "$0"
     ],
     "Body margin & padding: 0px": [
-        "/*",
-			"\tAuteur: {userName}",
-			"\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
-		"",
-			"\tOmschrijving: ${3:Omschrijving}",
-		"*/",
+        "{DefaultHead}",
 		"",
 		"body",
 		"{",

@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.0.41]
+## ***Changed***
+- Changelog.
+
+## [0.0.4]
+### **Added**
+- An option to change the default CSS and Javascript file path.
+- An icon in the statusbar showing if the extension is active.
+
+
 ## [0.0.31]
 ### **Bug fix**
 - Forgot some stuff.
@@ -12,7 +22,7 @@
 ### ***Changed***
 - Plugin will now only be loaded if you open a CSS, Javascript or HTML file.
 - The name in settings is now `KW1C Template Config` and not `kw1c-template`
-- Optimisation: Every language has their own file, so now it's easy to add languages. ;)
+- Optimisation: Every language has their own file, so now it's easy to add languages in the future. ;)
 - Suggestions wont show up if 3 or more lines of code have been written.
 - Updated README.md to inlude new settings and made it look nice.
 

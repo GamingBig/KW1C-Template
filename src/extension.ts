@@ -1,4 +1,4 @@
-import { ConfigurationChangeEvent, ExtensionContext, StatusBarAlignment, window, workspace } from "vscode";
+import { ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument, window, workspace } from "vscode";
 
 // Import all completion files
 import { jsCompletion } from "./completions/javascript";
@@ -27,17 +27,32 @@ export function activate(context: ExtensionContext) {
 	}
 
 	//! Make Statusbar icon
-	var statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right)
-
+	var statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, -1);
+	statusBarItem.name = "KW1C Template Active";
+	statusBarItem.text = "KW1C";
+	statusBarIcon(window.activeTextEditor?.document, statusBarItem);
+	window.onDidChangeActiveTextEditor((event) => {
+		if (event) {
+			statusBarIcon(event.document, statusBarItem);
+		}
+	});
 
 	//! Get all completions
 	const cssCompletionItem = cssCompletion(context, config),
 		jsCompletionItem = jsCompletion(context, config),
 		htmlCompletionItem = htmlCompletion(context, config);
 	// Push all completions
-	context.subscriptions.push(
-		cssCompletionItem,
+	context.subscriptions.push(cssCompletionItem,
 		jsCompletionItem,
-		htmlCompletionItem
+		htmlCompletionItem,
+		statusBarItem
 	);
+}
+
+function statusBarIcon(document: TextDocument | undefined, statusBarItem: StatusBarItem) {
+	if (document && ["css", "javascript", "html"].includes(document.languageId || "")) {
+		statusBarItem.show();
+	} else {
+		statusBarItem.hide();
+	}
 }

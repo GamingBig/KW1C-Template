@@ -12,7 +12,7 @@ export function htmlCompletion(context: ExtensionContext, config: WorkspaceConfi
 	return languages.registerCompletionItemProvider("html", {
 		provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
 			// Dont suggest when something has been typed
-			if (document.lineCount > 3) {
+			if (position.line > 2) {
 				return undefined;
 			}
 

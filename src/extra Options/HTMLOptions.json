@@ -1,23 +1,5 @@
 {
 	"defaultHead":[
-		"\t<head>",
-			"\t\t<title>",
-				"\t\t\t${4:$TM_FILENAME}",
-			"\t\t</title>",
-			"\t\t<meta charset=\"utf-8\">",
-			"\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">${5:",
-			"\t\t<!-- Koppeling CSS -->\n\t\t<link rel=\"stylesheet\" href=\"${6:--cssFileLoc--}\">}${7:",
-			"\t\t<!-- Koppeling JavaScript -->\n\t\t<script src=\"${8:--jsFileLoc--}\" defer></script>}",
-		"\t</head>"
-	],
-    "None":[
-		"{DefaultHead}",
-			"\t<body>",
-				"\t\t$0",
-			"\t</body>",
-		"</html>"
-    ],
-	"Header and Main":[
         "<!--",
 			"\tAuteur: {userName}",
 			"\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
@@ -27,6 +9,24 @@
 		"",
 		"<!DOCTYPE html>",
 		"<html>",
+			"\t<head>",
+				"\t\t<title>",
+					"\t\t\t${4:$TM_FILENAME}",
+				"\t\t</title>",
+				"\t\t<meta charset=\"utf-8\">",
+				"\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">${5:",
+				"\t\t<!-- Koppeling CSS -->\n\t\t<link rel=\"stylesheet\" href=\"${6:--cssFileLoc--}\">}${7:",
+				"\t\t<!-- Koppeling JavaScript -->\n\t\t<script src=\"${8:--jsFileLoc--}\" defer></script>}",
+			"\t</head>"
+	],
+    "None":[
+		"{DefaultHead}",
+			"\t<body>",
+				"\t\t$0",
+			"\t</body>",
+		"</html>"
+    ],
+	"Header and Main":[
 		"{DefaultHead}",
 			"\t<body>",
 			    "\t\t<header>",
@@ -39,15 +39,6 @@
 		"</html>"
     ],
 	"Header, Main and footer":[
-        "<!--",
-			"\tAuteur: {userName}",
-			"\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
-		"",
-			"\tOmschrijving: ${3:Omschrijving}",
-		"-->",
-		"",
-		"<!DOCTYPE html>",
-		"<html>",
 		"{DefaultHead}",
 			"\t<body>",
 			    "\t\t<header>",

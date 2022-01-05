@@ -3,7 +3,7 @@
 	"displayName": "KW1C Template",
 	"publisher": "JoeryMunninghoff",
 	"description": "",
-	"version": "0.0.31",
+	"version": "0.0.41",
 	"icon": "images/Template_logo_512x.png",
 	"engines": {
 		"vscode": "^1.62.0"
@@ -27,31 +27,25 @@
 			"title": "KW1C Template Config",
 			"properties": {
 				"kw1c-template.Name": {
+					"order": 0,
 					"type": "string",
 					"default": "You can add your name in settings.",
 					"description": "The name that gets used when you insert a template."
 				},
 				"kw1c-template.triggerWord": {
+					"order": 10,
 					"type": "string",
 					"default": "kw1c-template",
 					"description": "The text you need to type to insert the template."
 				},
 				"kw1c-template.addTime": {
+					"order": 20,
 					"type": "boolean",
 					"default": true,
 					"description": "Add the time to the template."
 				},
-				"kw1c-template.defaultCssFile": {
-					"type": "string",
-					"default": "styles/stylesheet.css",
-					"description": "Change the default CSS file location when inserting a HTML template"
-				},
-				"kw1c-template.defaultJavascriptFile": {
-					"type": "string",
-					"default": "scripts/script.js",
-					"description": "Change the default Javascript file location when inserting a HTML template"
-				},
 				"kw1c-template.htmlExtras": {
+					"order": 30,
 					"type": "string",
 					"default": "None",
 					"enum": [
@@ -66,6 +60,7 @@
 					]
 				},
 				"kw1c-template.cssExtras": {
+					"order": 40,
 					"type": "string",
 					"default": "None",
 					"enum": [
@@ -78,6 +73,7 @@
 					]
 				},
 				"kw1c-template.jsExtras": {
+					"order": 50,
 					"type": "string",
 					"default": "None",
 					"enum": [
@@ -86,6 +82,18 @@
 					"enumDescriptions": [
 						"Don't add anything extra."
 					]
+				},
+				"kw1c-template.defaultCssFile": {
+					"order": 60,
+					"type": "string",
+					"default": "styles/stylesheet.css",
+					"description": "Change the default CSS file location when inserting a HTML template"
+				},
+				"kw1c-template.defaultJavascriptFile": {
+					"order": 70,
+					"type": "string",
+					"default": "scripts/script.js",
+					"description": "Change the default Javascript file location when inserting a HTML template"
 				}
 			}
 		}

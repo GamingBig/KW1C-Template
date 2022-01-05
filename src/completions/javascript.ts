@@ -11,7 +11,7 @@ export function jsCompletion(context: ExtensionContext, config: WorkspaceConfigu
 	return languages.registerCompletionItemProvider("javascript", {
 		async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
 			// Dont suggest when something has been typed
-			if (document.lineCount > 3) {
+			if (position.line > 2) {
 				return undefined;
 			}
 
@@ -24,6 +24,7 @@ export function jsCompletion(context: ExtensionContext, config: WorkspaceConfigu
 			let userName = config.Name;
 			var jsSnippet = extraJS[extraJsConfig].join("\n");
 			// Modify snippet
+			jsSnippet = jsSnippet.replace("{DefaultHead}", extraJS["defaultHead"].join("\n"));
 			jsSnippet = jsSnippet.replace("{userName}", userName);
 			// Dont add time
 			if (!addTime) {
