@@ -3,7 +3,7 @@
 	"displayName": "KW1C Template",
 	"publisher": "JoeryMunninghoff",
 	"description": "",
-	"version": "0.0.41",
+	"version": "0.1.0",
 	"icon": "images/Template_logo_512x.png",
 	"engines": {
 		"vscode": "^1.62.0"
@@ -19,10 +19,14 @@
 		"onLanguage:css",
 		"onLanguage:javascript",
 		"onLanguage:html",
-		"sni"
+		"onCommand:kw1c-template.test"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"commands":{
+			"command": "\u200b",
+			"title": "\u200b"
+		},
 		"configuration": {
 			"title": "KW1C Template Config",
 			"properties": {
@@ -94,6 +98,12 @@
 					"type": "string",
 					"default": "scripts/script.js",
 					"description": "Change the default Javascript file location when inserting a HTML template"
+				},
+				"kw1c-template.colorModuleHeader":{
+					"order": 80,
+					"type": "boolean",
+					"default": true,
+					"description": "Color the module header."
 				}
 			}
 		}
