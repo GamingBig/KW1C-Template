@@ -1,8 +1,12 @@
 # Change Log
 
+## [0.1.1]
+## ***Changed***
+- Light mode module header colors.
+
 ## [0.1.0]
 ## **Added**
-- Colors for the module header
+- Colors for the module header.
 
 ## [0.4.1]
 ## ***Changed***

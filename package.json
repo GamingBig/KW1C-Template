@@ -3,7 +3,7 @@
 	"displayName": "KW1C Template",
 	"publisher": "JoeryMunninghoff",
 	"description": "",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"icon": "images/Template_logo_512x.png",
 	"engines": {
 		"vscode": "^1.62.0"

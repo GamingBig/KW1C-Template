@@ -13,7 +13,7 @@ export function colorize(context: ExtensionContext) {
 			color: "#686f7d"
 		},
 		light: {
-			color: "#929aaa"
+			color: "#785e2a"
 		},
 		fontStyle: "normal",
 		fontWeight: "normal"
@@ -33,7 +33,7 @@ export function colorize(context: ExtensionContext) {
 			color: "#7e818a"
 		},
 		light: {
-			color: "#abaeb1"
+			color: "#8b8585"
 		},
         fontWeight: "bold",
 		fontStyle: "normal"
