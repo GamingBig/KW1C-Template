@@ -1,10 +1,11 @@
 # Change Log
 
-## [0.1.1]
+## [0.5.1]
 ## ***Changed***
 - Light mode module header colors.
+- Broken version naming scheme, Normal updates are identified by the number in the second position, minor updates are identified by the number in the last position. I'm sorry if you want to change version and have to see my mess.
 
-## [0.1.0]
+## [0.5.0]
 ## **Added**
 - Colors for the module header.
 
