@@ -65,6 +65,9 @@ export function colorize(context: ExtensionContext) {
 		const identifierText: DecorationOptions[] = [];
 		let match;
 		while (match = regEx.exec(text)) {
+			if (activeEditor.document.positionAt(match.index).line > 10) {
+				continue
+			}
             // For identifier text
             var startPos = activeEditor.document.positionAt(match.index)
             var endPos = activeEditor.document.positionAt( match.index + match[0].split(": ")[0].length+2 )
