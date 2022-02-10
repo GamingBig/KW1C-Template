@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.6.1]
+## ***Changed***
+- Fixed PHP colorizer
+
 ## [0.6.0]
 ## ***Changed***
 - README.md to add newest option.
