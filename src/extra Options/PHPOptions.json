@@ -1,12 +1,13 @@
 {
-	"defaultHead":[
-        "<!--",
-			"\tAuteur: {userName}",
-			"\tAanmaakdatum: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
-		"",
-			"\tOmschrijving: ${3:Omschrijving}",
-		"-->",
-		"",
+    "defaultHead": [
+        "<?php",
+        "/**",
+        " * User: {userName}",
+        " * Date: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
+        " * File: ${1:$TM_FILENAME}",   
+        " */",
+        "?>",
+        "",
 		"<!DOCTYPE html>",
 		"<html lang=\"nl\">",
 			"\t<head>",
@@ -16,9 +17,9 @@
 				"\t\t<meta charset=\"utf-8\">",
 				"\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">${5:",
 				"\t\t<!-- Koppeling CSS -->\n\t\t<link rel=\"stylesheet\" href=\"${6:--cssFileLoc--}\">}${7:",
-				"\t\t<!-- Koppeling JavaScript -->\n\t\t<script src=\"${8:--jsFileLoc--}\" defer></script>}",
+                "\t\t<!-- Koppeling JavaScript -->\n\t\t<script src=\"${8:--jsFileLoc--}\" defer></script>}",
 			"\t</head>"
-	],
+    ],
     "None":[
 		"{DefaultHead}",
 			"\t<body>",

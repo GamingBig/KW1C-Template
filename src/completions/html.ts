@@ -19,7 +19,7 @@ export function htmlCompletion(context: ExtensionContext, config: WorkspaceConfi
 			// Get trigger from settings
 			var trigger = config.triggerWord;
 
-			var extraHtmlConfig = config.htmlExtras;
+			var extraHtmlConfig = config["Extras: HTML"];
 			var addTime = config.addTime;
 			var htmlSnippet = extraHTML[extraHtmlConfig].join("\n");
 
@@ -32,6 +32,9 @@ export function htmlCompletion(context: ExtensionContext, config: WorkspaceConfi
 			htmlSnippet = htmlSnippet.replace("{userName}", userName);
 			htmlSnippet = htmlSnippet.replace("--cssFileLoc--", cssFileLoc);
 			htmlSnippet = htmlSnippet.replace("--jsFileLoc--", jsFileLoc);
+			if (!config.addLangAttribute) {
+				htmlSnippet = htmlSnippet.replace(" lang=\"nl\"", "")
+			}
 			// Dont add time
 			if (!addTime) {
 				htmlSnippet = htmlSnippet.replace(" $CURRENT_HOUR:$CURRENT_MINUTE", "");

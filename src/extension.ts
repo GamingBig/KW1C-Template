@@ -1,13 +1,16 @@
-import { commands, env, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument, Uri, window, workspace } from "vscode";
+import { commands, ConfigurationTarget, env, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 
 // Import all completion files
 import { jsCompletion } from "./completions/javascript";
 import { htmlCompletion } from "./completions/html";
 import { cssCompletion } from "./completions/css";
+import { phpCompletion } from "./completions/php";
 import { colorize } from "./colorize/colorize";
 
 export function activate(context: ExtensionContext) {
 	var config = workspace.getConfiguration("kw1c-template");
+
+	updateOldSettings(config)
 
 	//! Ask user to input their name
 	if (config.Name == "You can add your name in settings.") {
@@ -65,22 +68,39 @@ export function activate(context: ExtensionContext) {
 	//! Get all completions
 	const cssCompletionItem = cssCompletion(context, config),
 		jsCompletionItem = jsCompletion(context, config),
-		htmlCompletionItem = htmlCompletion(context, config);
+		htmlCompletionItem = htmlCompletion(context, config),
+		phpCompletionItem = phpCompletion(context, config);
 	
 	
 	//! Push all subscriptions
 	context.subscriptions.push(cssCompletionItem,
 		jsCompletionItem,
 		htmlCompletionItem,
+		phpCompletionItem,
 		statusBarItem,
 		egg
 	);
 }
 
 function statusBarIcon(document: TextDocument | undefined, statusBarItem: StatusBarItem) {
-	if (document && ["css", "javascript", "html"].includes(document.languageId || "")) {
+	if (document && ["css", "javascript", "html", "php", "typescript"].includes(document.languageId || "")) {
 		statusBarItem.show();
 	} else {
 		statusBarItem.hide();
+	}
+}
+
+function updateOldSettings(config:WorkspaceConfiguration) {
+	if (config.has("cssExtras")) {
+		config.update('Extras: CSS', config.get("cssExtras"), true)
+		config.update("cssExtras", undefined, true)
+	}
+	if (config.has("htmlExtras")) {
+		config.update('Extras: HTML', config.get("htmlExtras"), true)
+		config.update("htmlExtras", undefined, true)
+	}
+	if (config.has("jsExtras")) {
+		config.update('Extras: Javascript', config.get("jsExtras"), true)
+		config.update("jsExtras", undefined, true)
 	}
 }

@@ -1,4 +1,5 @@
-import { ExtensionContext, languages, TextDocument, Position, CancellationToken, CompletionContext, workspace, CompletionItem, SnippetString, MarkdownString, WorkspaceConfiguration, ConfigurationChangeEvent, CompletionItemKind } from "vscode";
+import { URL } from "url";
+import { ExtensionContext, languages, TextDocument, Position, CancellationToken, CompletionContext, workspace, CompletionItem, SnippetString, MarkdownString, WorkspaceConfiguration, ConfigurationChangeEvent, CompletionItemKind, ConfigurationTarget } from "vscode";
 import * as extraCSSFile from "../extra Options/CSSOptions.json";
 
 export function cssCompletion(context: ExtensionContext, config: WorkspaceConfiguration) {
@@ -19,7 +20,7 @@ export function cssCompletion(context: ExtensionContext, config: WorkspaceConfig
 			// Get trigger from settings
 			var trigger = config.triggerWord;
 
-			var extraCssConfig = config.cssExtras;
+			var extraCssConfig = config['Extras: CSS'];
 			var addTime = config.addTime;
 			var cssSnippet = extraCSS[extraCssConfig].join("\n");
 

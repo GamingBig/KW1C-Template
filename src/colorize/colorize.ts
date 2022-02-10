@@ -1,4 +1,4 @@
-import { ConfigurationChangeEvent, window, DecorationOptions, Range, workspace, WorkspaceConfiguration, ExtensionContext } from "vscode";
+import { ConfigurationChangeEvent, window, DecorationOptions, Range, workspace, ExtensionContext } from "vscode";
 
 export function colorize(context: ExtensionContext) {
     var config = workspace.getConfiguration("kw1c-template");
@@ -47,10 +47,16 @@ export function colorize(context: ExtensionContext) {
 		}
         const text = activeEditor.document.getText();
 		var regEx;
-		if (activeEditor.document.languageId == "html") {
+
+		// Determine file
+		var isHtml = activeEditor.document.languageId == "html"
+		var isJsCss = ["css", "javascript", "typescript"].includes(activeEditor.document.languageId)
+		var isPhp = activeEditor.document.languageId == "php"
+		
+		if (isHtml) {
 			regEx = new RegExp(/(?=^<!--\r|\n|.)+(?:.)+(Auteur: |Aanmaakdatum: |Omschrijving: )(.*)(?=(\r|\n|.)*?-->)/g)
-		} else if (["css", "javascript"].includes(activeEditor.document.languageId)) {
-			regEx = new RegExp(/(?=(\/\*\r|\n|.))+(?:.)+(Auteur: |Aanmaakdatum: |Omschrijving: )(.*)(?=(.|\r|\n)*(\*\/))/g)
+		} else if (isJsCss || isPhp) {
+			regEx = new RegExp(/(?=(\/\*\r|\n|.))+(?:.)+([A-z]*?: )(.*)(?=(.|\r|\n)*(\*\/))/g)
 		} else {
 			return;
 		}
@@ -58,14 +64,14 @@ export function colorize(context: ExtensionContext) {
 		const descriptionText: DecorationOptions[] = [];
 		const identifierText: DecorationOptions[] = [];
 		let match;
-		while ((match = regEx.exec(text))) {
+		while (match = regEx.exec(text)) {
             // For identifier text
             var startPos = activeEditor.document.positionAt(match.index)
             var endPos = activeEditor.document.positionAt( match.index + match[0].split(": ")[0].length+2 )
             var newRange = new Range(startPos, endPos)
             var decoration = { range: newRange }
             identifierText.push(decoration);
-			if (match[0].startsWith("    Omschrijving: ")) {
+			if (match[0].includes("Omschrijving: ") || match[0].includes("* File: ")) {
                 var startPos = activeEditor.document.positionAt(match.index + match[0].split(": ")[0].length+2)
                 var endPos = activeEditor.document.positionAt( match.index + match[0].length)
                 var newRange = new Range(startPos, endPos)
@@ -79,17 +85,14 @@ export function colorize(context: ExtensionContext) {
 			}
 
 			// Opening comment
-			var startPos = activeEditor.document.positionAt(0)
+			var startPos = activeEditor.document.positionAt(isPhp ? match.index-5 : 0 )
             var endPos = activeEditor.document.positionAt( match.index )
             var newRange = new Range(startPos, endPos)
             var decoration = { range: newRange }
 			identifierText.push(decoration)
 
 			// Closing comment
-			var commentLength = 5
-			if (["css", "javascript"].includes(activeEditor.document.languageId)) {
-				commentLength = 4
-			}
+			var commentLength = isJsCss ? 4 : 5
 			var startPos = activeEditor.document.positionAt( match.index + match[0].length)
             var endPos = activeEditor.document.positionAt( (match.index + match[0].length) + commentLength )
             var newRange = new Range(startPos, endPos)

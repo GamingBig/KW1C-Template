@@ -8,7 +8,7 @@ export function jsCompletion(context: ExtensionContext, config: WorkspaceConfigu
 		config = workspace.getConfiguration("kw1c-template");
 	});
 
-	return languages.registerCompletionItemProvider("javascript", {
+	return languages.registerCompletionItemProvider(["javascript", "typescript"], {
 		async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
 			// Dont suggest when something has been typed
 			if (position.line > 2) {
@@ -18,7 +18,7 @@ export function jsCompletion(context: ExtensionContext, config: WorkspaceConfigu
 			// Get trigger from settings
 			var trigger = config.triggerWord;
 
-			var extraJsConfig = config.jsExtras;
+			var extraJsConfig = config['Extras: Javascript'];
 			var addTime = config.addTime;
 			// Get the users' name from settings.
 			let userName = config.Name;

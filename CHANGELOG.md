@@ -1,5 +1,16 @@
 # Change Log
 
+## [0.6.0]
+## ***Changed***
+- README.md to add newest option.
+- HTML files now have the lang set to `nl` by default.
+- Settings format.
+
+## **Added**
+- PHP support.
+- TypeScript support. (same options as JavaScript).
+- Option to toggle JavaScript tag when using PHP.
+
 ## [0.5.1]
 ## ***Changed***
 - Light mode module header colors.
