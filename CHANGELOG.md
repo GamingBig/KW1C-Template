@@ -1,7 +1,11 @@
 # Change Log
 
+## [0.6.2]
+## **Bug fix**
+- Fixed the last bug fix
+
 ## [0.6.1]
-## ***Changed***
+## **Bug fix**
 - Fixed PHP colorizer
 
 ## [0.6.0]

@@ -55,8 +55,10 @@ export function colorize(context: ExtensionContext) {
 		
 		if (isHtml) {
 			regEx = new RegExp(/(?=^<!--\r|\n|.)+(?:.)+(Auteur: |Aanmaakdatum: |Omschrijving: )(.*)(?=(\r|\n|.)*?-->)/g)
-		} else if (isJsCss || isPhp) {
-			regEx = new RegExp(/(?=(\/\*\r|\n|.))+(?:.)+([A-z]*?: )(.*)(?=(.|\r|\n)*(\*\/))/g)
+		} else if (isJsCss) {
+			regEx = new RegExp(/(?=(\/\*\r|\n|.))+(?:.)+(Auteur: |Aanmaakdatum: |Omschrijving: )(.*)(?=(.|\r|\n)*(\*\/))/g)
+		} else if (isPhp) {
+			regEx = new RegExp(/(?=(\/\*\r|\n|.))+(?:.)+\* (User: |Date: |File: )(.*)(?=(.|\r|\n)*(\*\/))/g)
 		} else {
 			return;
 		}
