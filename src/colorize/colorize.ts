@@ -141,7 +141,7 @@ export function colorize(context: ExtensionContext) {
 		light: {
 			color: "#785e2a",
 		},
-		backgroundColor: "orange",
+		// backgroundColor: "orange",
 		fontStyle: "normal",
 		fontWeight: "normal",
 	});
@@ -153,7 +153,7 @@ export function colorize(context: ExtensionContext) {
 		light: {
 			color: "#424242",
 		},
-		backgroundColor: "cyan",
+		// backgroundColor: "cyan",
 		fontStyle: "normal",
 	});
 	const identifierDeco = window.createTextEditorDecorationType({
@@ -164,7 +164,7 @@ export function colorize(context: ExtensionContext) {
 			color: "#8b8585",
 		},
 		fontWeight: "bold",
-		backgroundColor: "maroon",
+		// backgroundColor: "maroon",
 		fontStyle: "normal",
 	});
 
