@@ -1,4 +1,12 @@
 # Change Log
+[Version download page](https://marketplace.visualstudio.com/items?itemName=JoeryMunninghoff.kw1c-template)
+
+## [0.7.0]
+## **Added**
+- SQL support.
+
+## ***Changed***
+- Changed the way the colorizer handles text, its still a bit of a mess, but its my mess, so im ok with it.
 
 ## [0.6.2]
 ## **Bug fix**
@@ -22,7 +30,7 @@
 ## [0.5.1]
 ## ***Changed***
 - Light mode module header colors.
-- Broken version naming scheme, Normal updates are identified by the number in the second position, minor updates are identified by the number in the last position. I'm sorry if you want to change version and have to see my mess.
+- Fixed the broken version naming scheme, Normal updates are identified by the number in the second position, minor updates are identified by the number in the last position. I'm sorry if you want to change version and have to see my mess.
 
 ## [0.5.0]
 ## **Added**
@@ -48,7 +56,7 @@
 - A notification to ask if you want to set your name (if you haven't already).
 
 ### ***Changed***
-- Plugin will now only be loaded if you open a CSS, Javascript or HTML file.
+- Plugin will now only be loaded if you open a file that the plugin supports.
 - The name in settings is now `KW1C Template Config` and not `kw1c-template`.
 - Optimisation: Every language has their own file, so now it's easy to add languages in the future. ;)
 - Suggestions wont show up if 3 or more lines of code have been written.

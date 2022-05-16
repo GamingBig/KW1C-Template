@@ -1,0 +1,30 @@
+{
+    "defaultHead": [
+        "/*",
+            "\tAuthor: {userName}",
+            "\tDate: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",
+            "\tSubject: ${1:Omschrijving}",
+        "*/"
+    ],
+    "None": [
+        "{DefaultHead}",
+        "",
+        "$0"
+    ],
+    "USE ...": [
+        "{DefaultHead}",
+		"",
+		"USE ${2:MASTER}",
+        "",
+        "${0}"
+    ],
+    "USE & SELECT": [
+        "{DefaultHead}",
+        "",
+        "USE ${2:MASTER}",
+        "",
+        "SELECT * FROM ${3:Table}",
+        "",
+        "${0}"
+    ]
+}

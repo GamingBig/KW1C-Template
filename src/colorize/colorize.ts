@@ -1,22 +1,91 @@
-import { ConfigurationChangeEvent, window, DecorationOptions, Range, workspace, ExtensionContext } from "vscode";
+import { ConfigurationChangeEvent, window, DecorationOptions, Range, workspace, ExtensionContext, TextEditor, DocumentHighlight, TextEdit } from "vscode";
+
+const colorizers = {
+	html: {
+		regex: new RegExp(/(?<=<!--(.|\r|\n){0,100})(Auteur|Aanmaakdatum|Omschrijving).*(?=(.|\r|\n)*?-->)/gm),
+		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
+			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Omschrijving", "Auteur", "-->")
+		},
+	},
+	jsCss: {
+		regex: new RegExp(/(?<=\/\*(.|\r|\n){0,80})(Auteur|Aanmaakdatum|Omschrijving).*(?=(.|\r|\n)*?\*\/)/gm),
+		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
+			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Omschrijving", "Auteur", "*/")
+		},
+	},
+	php: {
+		regex: new RegExp(/(?<=\/\*(.|\r|\n){0,80})(User|Date|File).*(?=(.|\r|\n)*?\*\/)/gm),
+		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
+			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "File", "User", "*/")
+		},
+	},
+	sql: {
+		regex: new RegExp(/(?<=\/\*(.|\r|\n){0,80})(?<=(    ))(Author|Date|Subject).*(?=(.|\r|\n)*?\*\/)/gm),
+		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
+			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Subject", "Author", "*/")
+		},
+	},
+};
+
+function defaultColorizer(match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[], omschrijvingText: string, auteurText: string, closingComment: string) {
+	var line = match[0];
+	// Get the identifier
+	var identifier = line.split(": ")[0];
+
+	// Push the identifier
+	var IdRange = new Range(activeEditor.document.positionAt(match.index), activeEditor.document.positionAt(match.index + identifier.length + 1));
+	identifierText.push({ range: IdRange });
+
+	// For the Subject part
+	if (identifier.includes(omschrijvingText)) {
+		var descRange = new Range(activeEditor.document.positionAt(match.index + identifier.length + 1), activeEditor.document.positionAt(match.index + line.length));
+		descriptionText.push({ range: descRange });
+
+		// Use a loop to get all the lines inbetween so people can have subjects with multiple lines
+		for (let i = IdRange.end.line; i < activeEditor.document.lineCount; i++) {
+			var curLine = activeEditor.document.lineAt(i);
+			if (curLine.text.includes(closingComment)) {
+				// Desc comment
+				var descRange = new Range(IdRange.end, curLine.range.start);
+				descriptionText.push({ range: descRange });
+
+				// The closing comment
+				identifierText.push({
+					range: new Range(descRange.end, activeEditor.document.lineAt(curLine.range.end.line).range.end),
+				});
+				break;
+			}
+		}
+	} else {
+		var nonDescRange = new Range(activeEditor.document.positionAt(match.index), activeEditor.document.positionAt(match.index + line.length));
+		nonDescriptionText.push({ range: nonDescRange });
+	}
+
+	// The opening comment
+	if (identifier.includes(auteurText)) {
+		var openingComment = new Range(activeEditor.document.positionAt(0), activeEditor.document.positionAt(match.index));
+		identifierText.push({ range: openingComment });
+	}
+}
 
 export function colorize(context: ExtensionContext) {
-    var config = workspace.getConfiguration("kw1c-template");
-    workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
+	var config = workspace.getConfiguration("kw1c-template");
+	workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
 		config = workspace.getConfiguration("kw1c-template");
 	});
-    
+
 	let timeout: NodeJS.Timer | undefined = undefined;
 
 	const nonDesriptionDeco = window.createTextEditorDecorationType({
-        dark: {
-			color: "#686f7d"
+		dark: {
+			color: "#686f7d",
 		},
 		light: {
-			color: "#785e2a"
+			color: "#785e2a",
 		},
+		// backgroundColor: "orange",
 		fontStyle: "normal",
-		fontWeight: "normal"
+		fontWeight: "normal",
 	});
 
 	const descriptionDeco = window.createTextEditorDecorationType({
@@ -24,19 +93,21 @@ export function colorize(context: ExtensionContext) {
 			color: "#bbbcbd",
 		},
 		light: {
-			color: "#424242"
+			color: "#424242",
 		},
-		fontStyle: "normal"
+		// backgroundColor: "cyan",
+		fontStyle: "normal",
 	});
-    const identifierDeco = window.createTextEditorDecorationType({
-        dark: {
-			color: "#7e818a"
+	const identifierDeco = window.createTextEditorDecorationType({
+		dark: {
+			color: "#7e818a",
 		},
 		light: {
-			color: "#8b8585"
+			color: "#8b8585",
 		},
-        fontWeight: "bold",
-		fontStyle: "normal"
+		fontWeight: "bold",
+		// backgroundColor: "maroon",
+		fontStyle: "normal",
 	});
 
 	let activeEditor = window.activeTextEditor;
@@ -45,65 +116,36 @@ export function colorize(context: ExtensionContext) {
 		if (!activeEditor || config.colorModuleHeader == false) {
 			return;
 		}
-        const text = activeEditor.document.getText();
-		var regEx;
+		const text = activeEditor.document.getText();
 
 		// Determine file
-		var isHtml = activeEditor.document.languageId == "html"
-		var isJsCss = ["css", "javascript", "typescript"].includes(activeEditor.document.languageId)
-		var isPhp = activeEditor.document.languageId == "php"
-		
+		var isHtml = activeEditor.document.languageId == "html";
+		var isJsCss = ["css", "javascript", "typescript"].includes(activeEditor.document.languageId);
+		var isPhp = activeEditor.document.languageId == "php";
+		var isSql = activeEditor.document.languageId == "sql";
+
+		var curColorizer;
+
 		if (isHtml) {
-			regEx = new RegExp(/(?=^<!--\r|\n|.)+(?:.)+(Auteur: |Aanmaakdatum: |Omschrijving: )(.*)(?=(\r|\n|.)*?-->)/g)
+			curColorizer = colorizers.html;
 		} else if (isJsCss) {
-			regEx = new RegExp(/(?=(\/\*\r|\n|.))+(?:.)+(Auteur: |Aanmaakdatum: |Omschrijving: )(.*)(?=(.|\r|\n)*(\*\/))/g)
+			curColorizer = colorizers.jsCss;
 		} else if (isPhp) {
-			regEx = new RegExp(/(?=(\/\*\r|\n|.))+(?:.)+\* (User: |Date: |File: )(.*)(?=(.|\r|\n)*(\*\/))/g)
+			curColorizer = colorizers.php;
+		} else if (isSql) {
+			curColorizer = colorizers.sql;
 		} else {
 			return;
 		}
+
+		var regEx = curColorizer.regex;
+
 		const nonDescriptionText: DecorationOptions[] = [];
 		const descriptionText: DecorationOptions[] = [];
 		const identifierText: DecorationOptions[] = [];
 		let match;
-		while (match = regEx.exec(text)) {
-			if (activeEditor.document.positionAt(match.index).line > 10) {
-				continue
-			}
-            // For identifier text
-            var startPos = activeEditor.document.positionAt(match.index)
-            var endPos = activeEditor.document.positionAt( match.index + match[0].split(": ")[0].length+2 )
-            var newRange = new Range(startPos, endPos)
-            var decoration = { range: newRange }
-            identifierText.push(decoration);
-			if (match[0].includes("Omschrijving: ") || match[0].includes("* File: ")) {
-                var startPos = activeEditor.document.positionAt(match.index + match[0].split(": ")[0].length+2)
-                var endPos = activeEditor.document.positionAt( match.index + match[0].length)
-                var newRange = new Range(startPos, endPos)
-                var decoration = { range: newRange }
-				descriptionText.push(decoration);
-			} else {
-                var startPos = activeEditor.document.positionAt(match.index + match[0].split(": ")[0].length+2);
-                var endPos = activeEditor.document.positionAt(match.index + match[0].length);
-                var decoration = { range: new Range(startPos, endPos)};
-				nonDescriptionText.push(decoration);
-			}
-
-			// Opening comment
-			var startPos = activeEditor.document.positionAt(isPhp ? match.index-5 : 0 )
-            var endPos = activeEditor.document.positionAt( match.index )
-            var newRange = new Range(startPos, endPos)
-            var decoration = { range: newRange }
-			identifierText.push(decoration)
-
-			// Closing comment
-			var commentLength = isJsCss ? 4 : 5
-			var startPos = activeEditor.document.positionAt( match.index + match[0].length)
-            var endPos = activeEditor.document.positionAt( (match.index + match[0].length) + commentLength )
-            var newRange = new Range(startPos, endPos)
-            var decoration = { range: newRange }
-			identifierText.push(decoration)
-
+		while ((match = regEx.exec(text))) {
+			curColorizer.colorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText);
 		}
 		activeEditor.setDecorations(nonDesriptionDeco, nonDescriptionText);
 		activeEditor.setDecorations(descriptionDeco, descriptionText);
@@ -126,16 +168,24 @@ export function colorize(context: ExtensionContext) {
 		triggerUpdateDecorations();
 	}
 
-	window.onDidChangeActiveTextEditor(editor => {
-		activeEditor = editor;
-		if (editor) {
-			triggerUpdateDecorations();
-		}
-	}, null, context.subscriptions);
+	window.onDidChangeActiveTextEditor(
+		(editor) => {
+			activeEditor = editor;
+			if (editor) {
+				triggerUpdateDecorations();
+			}
+		},
+		null,
+		context.subscriptions
+	);
 
-	workspace.onDidChangeTextDocument(event => {
-		if (activeEditor && event.document === activeEditor.document) {
-			triggerUpdateDecorations(true);
-		}
-	}, null, context.subscriptions);
+	workspace.onDidChangeTextDocument(
+		(event) => {
+			if (activeEditor && event.document === activeEditor.document) {
+				triggerUpdateDecorations(true);
+			}
+		},
+		null,
+		context.subscriptions
+	);
 }

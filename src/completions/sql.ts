@@ -1,16 +1,16 @@
 import { URL } from "url";
 import { ExtensionContext, languages, TextDocument, Position, CancellationToken, CompletionContext, workspace, CompletionItem, SnippetString, MarkdownString, WorkspaceConfiguration, ConfigurationChangeEvent, CompletionItemKind, ConfigurationTarget } from "vscode";
-import * as extraCSSFile from "../extra Options/CSSOptions.json";
+import * as extraSqlFile from "../extra Options/SQLOptions.json";
 
-export function cssCompletion(context: ExtensionContext, config: WorkspaceConfiguration) {
-	var extraCSS = JSON.parse(JSON.stringify(extraCSSFile));
+export function sqlCompletion(context: ExtensionContext, config: WorkspaceConfiguration) {
+	var extraSql = JSON.parse(JSON.stringify(extraSqlFile));
 
 	// reload config if it changes
 	workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
 		config = workspace.getConfiguration("kw1c-template");
 	});
 
-	return languages.registerCompletionItemProvider("css", {
+	return languages.registerCompletionItemProvider("sql", {
 		provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
 			// Dont suggest when something has been typed
 			if (position.line > 2) {
@@ -20,25 +20,25 @@ export function cssCompletion(context: ExtensionContext, config: WorkspaceConfig
 			// Get trigger from settings
 			var trigger = config.triggerWord;
 
-			var extraCssConfig = config["Extras: CSS"];
+			var extraSqlConfig = config["Extras: SQL"];
 			var addTime = config.addTime;
-			var cssSnippet = extraCSS[extraCssConfig].join("\n");
+			var sqlSnippet = extraSql[extraSqlConfig].join("\n");
 
 			// Get the users' name from settings.
 			let userName = config.Name;
 			// Modify snippet
-			cssSnippet = cssSnippet.replace("{DefaultHead}", extraCSS["defaultHead"].join("\n"));
-			cssSnippet = cssSnippet.replace("{userName}", userName);
+			sqlSnippet = sqlSnippet.replace("{DefaultHead}", extraSql["defaultHead"].join("\n"));
+			sqlSnippet = sqlSnippet.replace("{userName}", userName);
 			// Dont add time
 			if (!addTime) {
-				cssSnippet = cssSnippet.replace(" $CURRENT_HOUR:$CURRENT_MINUTE", "");
+				sqlSnippet = sqlSnippet.replace(" $CURRENT_HOUR:$CURRENT_MINUTE", "");
 			}
 
-			const cssCompletion = new CompletionItem(trigger, CompletionItemKind.Constant);
-			cssCompletion.insertText = new SnippetString(cssSnippet);
-			cssCompletion.documentation = new MarkdownString("Inserts a snippet so you can get on with coding your project.");
+			const sqlCompletion = new CompletionItem(trigger, CompletionItemKind.Constant);
+			sqlCompletion.insertText = new SnippetString(sqlSnippet);
+			sqlCompletion.documentation = new MarkdownString("Inserts a snippet so you can get on with coding your project.");
 
-			return [cssCompletion];
+			return [sqlCompletion];
 		},
 	});
 }

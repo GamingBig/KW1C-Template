@@ -19,9 +19,9 @@ export function phpCompletion(context: ExtensionContext, config: WorkspaceConfig
 			// Get trigger from settings
 			var trigger = config.triggerWord;
 
-			var extraPhpConfig = config['Extras: PHP'];
+			var extraPhpConfig = config["Extras: PHP"];
 			var addTime = config.addTime;
-			var phpSnippet:string = extraPHP[extraPhpConfig].join("\n");
+			var phpSnippet: string = extraPHP[extraPhpConfig].join("\n");
 
 			// Get the users' name from settings.
 			let userName = config.Name;
@@ -31,14 +31,14 @@ export function phpCompletion(context: ExtensionContext, config: WorkspaceConfig
 			phpSnippet = phpSnippet.replace("{DefaultHead}", extraPHP["defaultHead"].join("\n"));
 			phpSnippet = phpSnippet.replace("{userName}", userName);
 			phpSnippet = phpSnippet.replace("--cssFileLoc--", cssFileLoc);
-			if(config.JavascriptTagInPHP){
+			if (config.JavascriptTagInPHP) {
 				phpSnippet = phpSnippet.replace("--jsFileLoc--", jsFileLoc);
-			}else{
+			} else {
 				// Remove JS tag
-				phpSnippet = phpSnippet.replace(/\${7(.|\r|\n)*\<\/script\>}/g, "")
+				phpSnippet = phpSnippet.replace(/\${7(.|\r|\n)*\<\/script\>}/g, "");
 			}
 			if (!config.addLangAttribute) {
-				phpSnippet = phpSnippet.replace(" lang=\"nl\"", "")
+				phpSnippet = phpSnippet.replace(' lang="nl"', "");
 			}
 			// Dont add time
 			if (!addTime) {

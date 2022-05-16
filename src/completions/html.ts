@@ -33,7 +33,7 @@ export function htmlCompletion(context: ExtensionContext, config: WorkspaceConfi
 			htmlSnippet = htmlSnippet.replace("--cssFileLoc--", cssFileLoc);
 			htmlSnippet = htmlSnippet.replace("--jsFileLoc--", jsFileLoc);
 			if (!config.addLangAttribute) {
-				htmlSnippet = htmlSnippet.replace(" lang=\"nl\"", "")
+				htmlSnippet = htmlSnippet.replace(' lang="nl"', "");
 			}
 			// Dont add time
 			if (!addTime) {

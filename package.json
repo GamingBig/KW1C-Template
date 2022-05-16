@@ -3,7 +3,7 @@
 	"displayName": "KW1C Template",
 	"publisher": "JoeryMunninghoff",
 	"description": "",
-	"version": "0.6.2",
+	"version": "0.7.0",
 	"icon": "images/Template_logo_512x.png",
 	"engines": {
 		"vscode": "^1.62.0"
@@ -21,6 +21,7 @@
 		"onLanguage:typescript",
 		"onLanguage:html",
 		"onLanguage:php",
+		"onLanguage:sql",
 		"onCommand:kw1c-template.test"
 	],
 	"main": "./out/extension.js",
@@ -87,7 +88,7 @@
 				}
 			},
 			{
-				"title": "Extra things",
+				"title": "Template Additions",
 				"order": 2,
 				"properties": {
 					"kw1c-template.Extras: CSS": {
@@ -140,6 +141,17 @@
 							"Add a header, main and footer element."
 						],
 						"type": "string"
+					},
+					"kw1c-template.Extras: SQL": {
+						"default": "None",
+						"enum": [
+							"USE ...",
+							"USE & SELECT"
+						],
+						"enumDescriptions": [
+							"Add a `USE *database*` statement",
+							"Add `USE database` and a `SELECT * FROM table` statement"
+						]
 					}
 				}
 			}
@@ -157,16 +169,16 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.62.0",
-		"@types/glob": "^7.1.4",
-		"@types/mocha": "^9.0.0",
-		"@types/node": "14.x",
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
-		"eslint": "^8.1.0",
-		"glob": "^7.1.7",
-		"mocha": "^9.1.3",
-		"typescript": "^4.4.4",
-		"@vscode/test-electron": "^1.6.2"
+		"@types/vscode": "^1.67.0",
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.1",
+		"@types/node": "17.x",
+		"@typescript-eslint/eslint-plugin": "^5.23.0",
+		"@typescript-eslint/parser": "^5.23.0",
+		"eslint": "^8.15.0",
+		"glob": "^8.0.3",
+		"mocha": "^10.0.0",
+		"typescript": "^4.6.4",
+		"@vscode/test-electron": "^2.1.3"
 	}
 }

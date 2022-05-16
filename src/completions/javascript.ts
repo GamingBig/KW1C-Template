@@ -18,7 +18,7 @@ export function jsCompletion(context: ExtensionContext, config: WorkspaceConfigu
 			// Get trigger from settings
 			var trigger = config.triggerWord;
 
-			var extraJsConfig = config['Extras: Javascript'];
+			var extraJsConfig = config["Extras: Javascript"];
 			var addTime = config.addTime;
 			// Get the users' name from settings.
 			let userName = config.Name;
