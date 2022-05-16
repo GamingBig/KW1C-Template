@@ -1,6 +1,10 @@
 # Change Log
 [Version download page](https://marketplace.visualstudio.com/items?itemName=JoeryMunninghoff.kw1c-template)
 
+## [0.7.1]
+## **Bug fix**
+- One day i'll make a piece of code that works first try... But today is not that day.
+
 ## [0.7.0]
 ## **Added**
 - SQL support.

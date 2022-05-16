@@ -2,69 +2,127 @@ import { ConfigurationChangeEvent, window, DecorationOptions, Range, workspace, 
 
 const colorizers = {
 	html: {
-		regex: new RegExp(/(?<=<!--(.|\r|\n){0,100})(Auteur|Aanmaakdatum|Omschrijving).*(?=(.|\r|\n)*?-->)/gm),
+		regex: new RegExp(/(?<!-->(.|\r|\n)*)(?<=<!--(.|\r|\n)*)(?<=([^A-z0-9]))([A-z0-9]).*(?=(.|\r|\n)*-->)/gm),
 		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
-			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Omschrijving", "Auteur", "-->")
+			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Omschrijving", "Auteur", "-->");
 		},
 	},
 	jsCss: {
-		regex: new RegExp(/(?<=\/\*(.|\r|\n){0,80})(Auteur|Aanmaakdatum|Omschrijving).*(?=(.|\r|\n)*?\*\/)/gm),
+		regex: new RegExp(/(?<!\*\/(.|\r|\n)*)(?<=\/\*(.|\r|\n)*)(?<=([^A-z0-9]))([A-z0-9]).*(?=(.|\r|\n)*\*\/)/gm),
 		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
-			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Omschrijving", "Auteur", "*/")
+			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Omschrijving", "Auteur", "*/");
 		},
 	},
 	php: {
-		regex: new RegExp(/(?<=\/\*(.|\r|\n){0,80})(User|Date|File).*(?=(.|\r|\n)*?\*\/)/gm),
+		regex: new RegExp(/(?<!\*\/(.|\r|\n)*)(?<=\/\*(.|\r|\n)*)(?<=([^A-z0-9]))([A-z0-9]).*(?<!:.*):(?=(.|\r|\n)*\*\/)/gm),
 		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
-			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "File", "User", "*/")
+			// Just a shorter version
+			const positionAt = activeEditor.document.positionAt;
+			const lineAt = activeEditor.document.lineAt;
+
+			var line = match[0];
+			// Get the identifier
+			var identifier = line.split(": ")[0];
+
+			if(positionAt(match.index).line > 10) return
+
+			// Push the identifier
+			var IdRange = new Range(positionAt(match.index), positionAt(match.index + identifier.length));
+			identifierText.push({ range: IdRange });
+
+			// For the Subject part
+			if (identifier.includes("File")) {
+				var descRange = new Range(positionAt(match.index + identifier.length + 1), positionAt(match.index + line.length));
+				descriptionText.push({ range: descRange });
+
+				// Use a loop to get all the lines inbetween so people can have subjects with multiple lines
+				for (let i = IdRange.end.line; i < activeEditor.document.lineCount; i++) {
+					var curLine = lineAt(i);
+					if (curLine.text.includes("*/")) {
+						// Desc comment
+						var descRange = new Range(IdRange.end, curLine.range.start);
+						descriptionText.push({ range: descRange });
+
+						// The closing comment
+						nonDescriptionText.push({
+							range: new Range(descRange.end, lineAt(curLine.range.end.line).range.end),
+						});
+						break;
+					}
+				}
+			} else {
+				var nonDescRange = new Range(positionAt(match.index), positionAt(match.index + line.length));
+				nonDescriptionText.push({ range: nonDescRange });
+			}
+
+			// The opening comment
+			for (let i = 0; i < activeEditor.document.lineCount; i++) {
+				var curLine = lineAt(i);
+				if (curLine.text.includes("/**")) {
+					var openingComment = new Range(curLine.range.start, positionAt(match.index));
+					nonDescriptionText.push({ range: openingComment });
+					break;
+				}
+			}
 		},
 	},
 	sql: {
-		regex: new RegExp(/(?<=\/\*(.|\r|\n){0,80})(?<=(    ))(Author|Date|Subject).*(?=(.|\r|\n)*?\*\/)/gm),
+		regex: new RegExp(/(?<!\*\/(.|\r|\n)*)(?<=\/\*(.|\r|\n)*)(?<=([^A-z0-9]))([A-z0-9]).*(?=(.|\r|\n)*)/gm),
 		colorizer: (match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[]) => {
-			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Subject", "Author", "*/")
+			defaultColorizer(match, activeEditor, nonDescriptionText, descriptionText, identifierText, "Subject", "Author", "*/");
 		},
 	},
 };
 
 function defaultColorizer(match: RegExpExecArray, activeEditor: TextEditor, nonDescriptionText: DecorationOptions[], descriptionText: DecorationOptions[], identifierText: DecorationOptions[], omschrijvingText: string, auteurText: string, closingComment: string) {
+	// Just a shorter version
+	const positionAt = activeEditor.document.positionAt;
+	const lineAt = activeEditor.document.lineAt;
+
 	var line = match[0];
 	// Get the identifier
 	var identifier = line.split(": ")[0];
 
+	if(positionAt(match.index).line > 10) return
+
 	// Push the identifier
-	var IdRange = new Range(activeEditor.document.positionAt(match.index), activeEditor.document.positionAt(match.index + identifier.length + 1));
-	identifierText.push({ range: IdRange });
+	// Make a temporary one, since apparently it gets used
+	var IdRange = new Range(activeEditor.document.positionAt(match.index), activeEditor.document.positionAt(match.index));
+	if((/.*[A-z]: /g).test(line))
+	{
+		IdRange = new Range(activeEditor.document.positionAt(match.index), activeEditor.document.positionAt(match.index + identifier.length + 1));
+		identifierText.push({ range: IdRange });
+	}
 
 	// For the Subject part
 	if (identifier.includes(omschrijvingText)) {
-		var descRange = new Range(activeEditor.document.positionAt(match.index + identifier.length + 1), activeEditor.document.positionAt(match.index + line.length));
+		var descRange = new Range(positionAt(match.index + identifier.length + 1), positionAt(match.index + line.length));
 		descriptionText.push({ range: descRange });
 
 		// Use a loop to get all the lines inbetween so people can have subjects with multiple lines
 		for (let i = IdRange.end.line; i < activeEditor.document.lineCount; i++) {
-			var curLine = activeEditor.document.lineAt(i);
+			var curLine = lineAt(i);
 			if (curLine.text.includes(closingComment)) {
 				// Desc comment
 				var descRange = new Range(IdRange.end, curLine.range.start);
 				descriptionText.push({ range: descRange });
 
 				// The closing comment
-				identifierText.push({
-					range: new Range(descRange.end, activeEditor.document.lineAt(curLine.range.end.line).range.end),
+				nonDescriptionText.push({
+					range: new Range(descRange.end, lineAt(curLine.range.end.line).range.end),
 				});
 				break;
 			}
 		}
 	} else {
-		var nonDescRange = new Range(activeEditor.document.positionAt(match.index), activeEditor.document.positionAt(match.index + line.length));
+		var nonDescRange = new Range(positionAt(match.index), positionAt(match.index + line.length));
 		nonDescriptionText.push({ range: nonDescRange });
 	}
 
 	// The opening comment
 	if (identifier.includes(auteurText)) {
-		var openingComment = new Range(activeEditor.document.positionAt(0), activeEditor.document.positionAt(match.index));
-		identifierText.push({ range: openingComment });
+		var openingComment = new Range(positionAt(0), positionAt(match.index));
+		nonDescriptionText.push({ range: openingComment });
 	}
 }
 
@@ -83,7 +141,7 @@ export function colorize(context: ExtensionContext) {
 		light: {
 			color: "#785e2a",
 		},
-		// backgroundColor: "orange",
+		backgroundColor: "orange",
 		fontStyle: "normal",
 		fontWeight: "normal",
 	});
@@ -95,7 +153,7 @@ export function colorize(context: ExtensionContext) {
 		light: {
 			color: "#424242",
 		},
-		// backgroundColor: "cyan",
+		backgroundColor: "cyan",
 		fontStyle: "normal",
 	});
 	const identifierDeco = window.createTextEditorDecorationType({
@@ -106,7 +164,7 @@ export function colorize(context: ExtensionContext) {
 			color: "#8b8585",
 		},
 		fontWeight: "bold",
-		// backgroundColor: "maroon",
+		backgroundColor: "maroon",
 		fontStyle: "normal",
 	});
 
