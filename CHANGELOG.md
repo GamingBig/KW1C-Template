@@ -4,6 +4,7 @@
 ## [0.7.0]
 ## **Added**
 - SQL support.
+- Added GNU GPLv3 license, (idc if you copy this project, but at least dont make it closed-source)
 
 ## ***Changed***
 - Changed the way the colorizer handles text, its still a bit of a mess, but its my mess, so im ok with it.
