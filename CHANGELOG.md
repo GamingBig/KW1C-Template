@@ -1,6 +1,14 @@
 # Change Log
 [Version download page](https://marketplace.visualstudio.com/items?itemName=JoeryMunninghoff.kw1c-template)
 
+## [0.7.3]
+## **Bug fix**
+- The pit of despair looks real nice right now.
+
+## [0.7.2]
+## **Bug fix**
+- It's still not that day...
+
 ## [0.7.1]
 ## **Bug fix**
 - One day i'll make a piece of code that works first try... But today is not that day.
